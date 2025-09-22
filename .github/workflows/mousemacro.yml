@@ -1,0 +1,29 @@
+name: Mouse Macro Test
+
+on:
+  # 이 워크플로우를 수동으로 실행할 수 있도록 합니다.
+  # GitHub Actions 탭에서 'Run workflow' 버튼이 나타납니다.
+  workflow_dispatch:
+
+jobs:
+  run-mouse-macro:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. 저장소 코드 체크아웃
+      # 워크플로우가 저장소 파일에 접근할 수 있게 합니다.
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. 파이썬 환경 설정
+      # GitHub Actions에서 파이썬 3.10 버전을 설정합니다.
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      # 3. 마우스 매크로 스크립트 실행
+      # 수정된 파이썬 스크립트(Mousemacro.py)를 실행합니다.
+      # 스크립트가 실행될 때, pynput 라이브러리가 없으면 자동으로 설치됩니다.
+      - name: Run mouse macro script
+        run: python Mousemacro.py
