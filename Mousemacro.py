@@ -1,9 +1,31 @@
+import sys
+import subprocess
 import time
 import threading
 import platform
+import os
 
-from pynput import mouse, keyboard
-from pynput.mouse import Controller as MouseController, Button
+# =========================
+# 필요한 라이브러리 자동 설치
+# =========================
+try:
+    from pynput import mouse, keyboard
+    from pynput.mouse import Controller as MouseController, Button
+    
+except ImportError:
+    print("🚨 'pynput' 라이브러리가 설치되어 있지 않습니다.")
+    print("자동으로 설치를 시작합니다. 잠시만 기다려주세요...")
+    try:
+        # pip을 통해 pynput 설치 시도
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "pynput"])
+        print("✅ 'pynput' 라이브러리 설치가 완료되었습니다.")
+        # 설치 후 프로그램을 재시작하도록 안내
+        print("프로그램을 다시 실행해주세요.")
+        sys.exit()
+    except subprocess.CalledProcessError as e:
+        print(f"❌ 라이브러리 설치 실패: {e}")
+        print("인터넷 연결을 확인하거나, 수동으로 'pip install pynput' 명령어를 실행해주세요.")
+        sys.exit()
 
 # =========================
 # Windows: DPI 인식 + 가상 화면 좌표
@@ -183,7 +205,7 @@ def toggle_playback():
 def print_help():
     print("=== 마우스 매크로 v3 (클릭+스크롤, 듀얼모니터/가상화면 대응) ===")
     print("Ctrl+X : 녹화 시작/종료")
-    print("alt+Z : 재생 시작/정지 (무한 반복)")
+    print("Ctrl+z or alt+Z : 재생 시작/정지 (무한 반복)")
     print("Esc    : 프로그램 종료")
     print("=========================================================")
 
@@ -197,6 +219,7 @@ def main():
         stop_playback.set()
         m_listener.stop()
         hotkeys.stop()
+        os._exit(0) # 프로그램 강제 종료
 
     hotkeys = keyboard.GlobalHotKeys({
         '<ctrl>+x': toggle_record,
