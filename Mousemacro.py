@@ -5,6 +5,19 @@ import threading
 import platform
 import os
 
+# 기존 코드 상단에 추가
+def log_message(message):
+    """메시지를 콘솔에 출력하고, 로그 파일에 기록합니다."""
+    print(message)
+    # GitHub Actions 환경에서 로그 파일을 생성합니다.
+    with open("macro_log.txt", "a") as f:
+        f.write(f"{message}\n")
+
+# 기존 코드에서 모든 print() 함수를 log_message()로 변경
+# 예시:
+# print(f"▶ 녹화 시작 | ...")
+# -> log_message(f"▶ 녹화 시작 | ...")
+
 # =========================
 # 필요한 라이브러리 자동 설치
 # =========================
@@ -232,3 +245,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
